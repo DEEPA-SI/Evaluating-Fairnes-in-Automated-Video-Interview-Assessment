@@ -1,1 +1,1 @@
-# Evaluating-Fairnes-in-Automated-Video-Interview-Assessment
+# evaluating-fairnes-in-automated-video-interview-assessment
