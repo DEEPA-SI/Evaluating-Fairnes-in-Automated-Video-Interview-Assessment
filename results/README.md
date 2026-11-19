@@ -29,7 +29,8 @@ units and small interval endpoints.
 |---|---|
 | [Neural and reference utility](stage_a_utility.csv) | Thirty aggregate model/seed utility rows |
 | [Paired neural utility](stage_a_secondary_utility.json) | Exposure-matched penalty effects and recorded participant-bootstrap intervals |
-| [Neural diagnostics](stage_a_diagnostics_v2.json) | Checkpoint, prediction-level and reference diagnostics in aggregate form |
+| [Representation and proxy diagnostics](stage_a_diagnostics_v2.json) | Active-boundary, feature-coverage, representation and annotation-free proxy summaries |
+| [Neural checkpoint summary](neural-checkpoint-summary.json) | Six configuration/seed summaries: selected epochs in five rotations, pooled prediction means and observed target mean on the original 1–7 scale |
 | [Fixed-model masks](stage_a_modality_masks.json) | Inference-only modality-dependence summaries |
 | [Original perceived-group audit](original-neural-audit.json) | Aggregate original neural/group audit, with phase coverage and supported-category summaries |
 | [Corrected proxy association](proxy-association-correction-2026-11-06.json) | Fold-aware proxy correspondence; visual perceived-gender NMI and ARI equal 1 |
@@ -40,6 +41,11 @@ units and small interval endpoints.
 aggregate, not participant-level predictions. Historical references within derivative
 receipts identify their original source locations; they are not dependencies of the
 public reporting command. Superseded defective exploratory outputs are not included.
+
+The checkpoint summary supports the thesis's neural-checkpoint table. It is a reporting
+projection of the existing fixed predictions and locks, not a new fit or inference run.
+It contains no individual records; `face_w1` is the original visual-W1 configuration.
+The selected epochs identify retained checkpoints rather than total training duration.
 
 ## Included example and fresh calculation
 

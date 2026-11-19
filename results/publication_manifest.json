@@ -102,8 +102,8 @@
     },
     {
       "path": "results/README.md",
-      "sha256": "83cdad601382d9f0e8e29071a821cfea60cbfd72cd51d76a6b047cfa420196be",
-      "size_bytes": 3733
+      "sha256": "8537cc9c2e4bc77bb317c7d708ae5e094dc48f17010aaaf4dcd5e0808059ca1c",
+      "size_bytes": 4326
     },
     {
       "path": "results/avi-baseline-2026-11-02-reconciled.json",
@@ -129,6 +129,11 @@
       "path": "results/mit-strong-ridge-2026-11-19-v1.md",
       "sha256": "c4ae14bfcea2fa86aec75136e365963ae5a823a5ec2609f285f0eabf8565e9d7",
       "size_bytes": 7677
+    },
+    {
+      "path": "results/neural-checkpoint-summary.json",
+      "sha256": "edf87698451a81cbe8f75e5ac7805b4a7f22244f886bcadc415bd616e3b43d2a",
+      "size_bytes": 2856
     },
     {
       "path": "results/original-neural-audit.json",
@@ -192,8 +197,8 @@
     },
     {
       "path": "results/source_export.json",
-      "sha256": "d5844d1eed29868f7a2a8542c1c61113efe837136df7d271ac0004d660591c7f",
-      "size_bytes": 32573
+      "sha256": "18c62ec836275a88ca4963d049ebc0999e77b15d45ce15534e58151731686e73",
+      "size_bytes": 32868
     },
     {
       "path": "results/stage_a_diagnostics_v2.json",
@@ -617,8 +622,8 @@
     },
     {
       "path": "tests/test_public_package.py",
-      "sha256": "532c35fab464b681a2170517f15e0c210126930b8834981e0b5138eb0d47fa40",
-      "size_bytes": 6400
+      "sha256": "e995d9ccbee836787b695885d4195e8df6bf8146f85a4c1814038677148193b2",
+      "size_bytes": 7865
     },
     {
       "path": "tests/test_publication.py",

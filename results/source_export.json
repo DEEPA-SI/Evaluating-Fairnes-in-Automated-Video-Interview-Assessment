@@ -659,6 +659,13 @@
       "source_sha256": "b9ed092fdde9a1bc31e110cbe2527f2ba1accdd5d29350b7df7fea477e3ff94e"
     }
   ],
+  "reporting_addenda": [
+    {
+      "public_path": "results/neural-checkpoint-summary.json",
+      "relationship": "aggregate_projection_from_existing_frozen_neural_predictions_and_locks",
+      "source_scope": "six_configuration_seed_summaries_no_individual_records_or_new_fitting"
+    }
+  ],
   "schema_version": "public-research-source-export-1",
   "scope": "reviewed_research_code_and_aggregate_evidence_no_private_history_or_individual_data",
   "source_commit": "4b82578f0a2ba73e517753af1a2d113a8efc18b4"

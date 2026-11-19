@@ -162,3 +162,30 @@ def test_local_document_links_resolve_within_the_public_checkout() -> None:
             path = (document.parent / target).resolve()
             assert path.is_relative_to(ROOT), (document.name, target)
             assert path.exists(), (document.name, target)
+
+
+def test_neural_checkpoint_summary_preserves_the_six_original_aggregate_rows() -> None:
+    payload = json.loads((ROOT / "results/neural-checkpoint-summary.json").read_bytes())
+    assert payload["schema_version"] == "neural-checkpoint-summary-1"
+    assert payload["scope"] == "existing_frozen_fits_no_refitting_or_new_inference"
+    assert (payload["participant_count"], payload["session_count"]) == (69, 138)
+    assert payload["prediction_scale"] == "original_1_to_7"
+    assert payload["epoch_scope"] == "selected_checkpoint_not_total_training_duration"
+    assert round(payload["observed_target_mean"], 3) == 4.945
+    expected = {
+        ("erm", 1): ([76, 3, 16, 10, 2], 4.578),
+        ("erm", 11): ([1, 2, 15, 34, 2], 4.156),
+        ("erm", 21): ([1, 2, 30, 15, 1], 4.767),
+        ("face_w1", 1): ([199, 2, 14, 8, 2], 4.480),
+        ("face_w1", 11): ([1, 2, 54, 34, 28], 4.257),
+        ("face_w1", 21): ([1, 2, 19, 20, 1], 4.748),
+    }
+    rows = payload["rows"]
+    assert len(rows) == len(expected)
+    assert {(row["configuration"], row["seed"]) for row in rows} == set(expected)
+    for row in rows:
+        epochs, predicted_mean = expected[row["configuration"], row["seed"]]
+        assert row["checkpoint_epochs_by_rotation"] == epochs
+        assert round(row["pooled_prediction_mean"], 3) == predicted_mean
+        for key in ("prediction_file_sha256", "prediction_lock_sha256"):
+            assert re.fullmatch(r"[0-9a-f]{64}", row[key])

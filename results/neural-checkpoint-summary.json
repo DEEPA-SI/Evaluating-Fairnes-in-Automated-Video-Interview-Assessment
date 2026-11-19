@@ -1,0 +1,95 @@
+{
+  "schema_version": "neural-checkpoint-summary-1",
+  "scope": "existing_frozen_fits_no_refitting_or_new_inference",
+  "participant_count": 69,
+  "session_count": 138,
+  "prediction_scale": "original_1_to_7",
+  "epoch_scope": "selected_checkpoint_not_total_training_duration",
+  "observed_target_mean": 4.945342623708406,
+  "rows": [
+    {
+      "configuration": "erm",
+      "seed": 1,
+      "checkpoint_epochs_by_rotation": [
+        76,
+        3,
+        16,
+        10,
+        2
+      ],
+      "pooled_prediction_mean": 4.578138562000316,
+      "prediction_file_sha256": "fef674da2c4120a7df85097f855a90f5cd0af839fa858c3f1084aa7ce3221320",
+      "prediction_lock_sha256": "5c311a1e4d5e1157d316371f3ec2f4c9bac8da68816ad4e8059b9f233fa5c7b3"
+    },
+    {
+      "configuration": "erm",
+      "seed": 11,
+      "checkpoint_epochs_by_rotation": [
+        1,
+        2,
+        15,
+        34,
+        2
+      ],
+      "pooled_prediction_mean": 4.155874359542909,
+      "prediction_file_sha256": "a3fcb44a54f8e04202deb45e69115557e2c4af6f43cb3224b11b096b8e2827c5",
+      "prediction_lock_sha256": "7c6030870c9617780b53d7d1a92c60516266cf9e3d7d4c2b1e126a5cc2ea792d"
+    },
+    {
+      "configuration": "erm",
+      "seed": 21,
+      "checkpoint_epochs_by_rotation": [
+        1,
+        2,
+        30,
+        15,
+        1
+      ],
+      "pooled_prediction_mean": 4.766561856736308,
+      "prediction_file_sha256": "9220112125ed5629403377ff273db08866cefcdb0ce05763a30687f5aacc635d",
+      "prediction_lock_sha256": "245648591bf843437e95913adabc1bf492e9e586d4cda9d2ae0766f98b7ddc19"
+    },
+    {
+      "configuration": "face_w1",
+      "seed": 1,
+      "checkpoint_epochs_by_rotation": [
+        199,
+        2,
+        14,
+        8,
+        2
+      ],
+      "pooled_prediction_mean": 4.480467820944993,
+      "prediction_file_sha256": "a7f26cc9ef42c37962e6f068e2451175cd48ca213f5d133548f35d70403e2869",
+      "prediction_lock_sha256": "33fb3bf6f5ab31d49f515251505a41e20773003285f9fdd0e5ed8dfa31f64e1a"
+    },
+    {
+      "configuration": "face_w1",
+      "seed": 11,
+      "checkpoint_epochs_by_rotation": [
+        1,
+        2,
+        54,
+        34,
+        28
+      ],
+      "pooled_prediction_mean": 4.256581635578819,
+      "prediction_file_sha256": "a7e4e87b6a9364b49760361520c5af0631917422170e6e3e7d6f7766577f2dbe",
+      "prediction_lock_sha256": "df683f80b9062f0a755c5c23761305a6671a3d00d5eb3cb304fc8d601134ce2c"
+    },
+    {
+      "configuration": "face_w1",
+      "seed": 21,
+      "checkpoint_epochs_by_rotation": [
+        1,
+        2,
+        19,
+        20,
+        1
+      ],
+      "pooled_prediction_mean": 4.7484438263851665,
+      "prediction_file_sha256": "b017a2bf87ab544ce6d2617215794cf3f232af6dfe5d3cf5e28fd006eb0f81e4",
+      "prediction_lock_sha256": "3d304a0d633cd110a96cb55d3d6eecf97b311df5ef1be921d20e77c83d938b4e"
+    }
+  ]
+}
