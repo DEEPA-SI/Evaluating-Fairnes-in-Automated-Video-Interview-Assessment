@@ -1,0 +1,26 @@
+{
+  "complete_grid_rows": 45,
+  "implementation_sha256": "68024f325910c861f51b0ed77224cdead352906a38f33e493662f0d8ab531e77",
+  "matched_contrast_rows": 112,
+  "matplotlib_version": "3.11.1",
+  "output_sha256": {
+    "baseline_quality.png": "390e601a5d81384eed7743a1e9b0f692856a35a96014d5b70062b1c3aa2b56a2",
+    "baseline_quality.svg": "d25d2adeedf185c159a3b4aa688bc15d3d57bf7e7615127cd2a2a0aac126b044",
+    "complete_grid.csv": "4750819091346070728aa15d15002deb770bc23e29442dc99923bc7e15ec084f",
+    "contribution_overview.md": "38d9b6183aa51f5d4e8c09e7f6c06dc88a94bd24e8d482f7b712ff4424b226c7",
+    "lambda_tradeoffs.png": "fd087981721bd96884eb76b727eeaac7e1fc95ec59c5b8cde6fb6432ed324dcd",
+    "lambda_tradeoffs.svg": "83d6a276bf2016ce121d0bc07d54e333a164d8524a1ac623da754b6a8f2aeb18",
+    "matched_contrasts.csv": "cec1549d755968b7175a6634ae4f09967d0523c14ae39561193cd0b7f5c93846",
+    "primary_gender_gains.png": "861cc4a412475ad89c908582db54e1cb637fb6a2af63c45985e21159b3e796bc",
+    "primary_gender_gains.svg": "2756eaba461be58e4e5cb4dfebcc56b7efde25b7df0afd3b6b64bbe8568d432f"
+  },
+  "schema_version": "public-aggregate-replay-1",
+  "scope": "aggregate_report_and_figure_replay_not_fitting_or_bootstrap_inference",
+  "source_sha256": {
+    "avi-compact-reconciled-v1.json": "f00abf5ceade84fd95a7ce3180d4a88afb74c170689a2619a927faa2eb7444db",
+    "mit-strong-ridge-2026-11-19-v1.json": "0e6317ec3ce4b7006d3c6767dedb4934b8aee832a6c3b08261fcd7ba5ab024ab",
+    "proxy-association-correction-2026-11-06.json": "cdfa6e8106cb837acec23f424c091ab195494e552bfa45b0410349f5cb11199e",
+    "stage_a_secondary_utility.json": "78977b61d5454e3e8632184ea7e9543597b29d53169e1e9b52d31ceca32b64ed",
+    "study2-compact-2026-10-21-aggregate.json": "c0560b284a30b3e10785027cd4ee28e09694218229abc6d44c13653e19bd13cd"
+  }
+}

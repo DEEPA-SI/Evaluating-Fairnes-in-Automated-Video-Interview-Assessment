@@ -1,0 +1,42 @@
+schema_version: mit-strong-ridge-protocol-1
+study_id: mit-strong-ridge-2026-11-19-v1
+status: frozen_for_execution
+post_audit_exploratory: true
+interpretation: stronger_reference_sensitivity_on_previously_audited_mit_participants
+ridge_alpha: 1000.0
+development_selection_file: results/study2_rq1_aggregate_v1.json
+development_selection_file_sha256: 96c43511c0edc114b6fac8a0aade13786712245ba790ea7c8cf2004de97915f4
+alpha_selection: fixed_to_previously_development_selected_alpha_in_all_five_outer_folds
+participants: 69
+sessions: 138
+outer_folds: 5
+features: [video_1024, audio_1536, text_768]
+target: RecommendHiring
+target_transform: (raw-1)/6
+partition: legacy_compact_outer_test_f_validation_f_plus_1_mod_5_remaining_three_train
+standardisation: train_only_per_fold
+row_space: train_only_exact_supported_svd_basis_with_unpenalised_intercept
+validation_refit: false
+proxy_groups: train_fitted_visual_and_audio_kmeans_2_as_in_original_compact
+annotation_fields_used_for_fitting: []
+strengths: [0.002, 0.02, 0.2]
+expected_arms: 15
+expected_fits: 75
+controls: [natural_task, visual_balanced_task, audio_balanced_task]
+penalties: exact_empirical_w1_natural_and_balanced_for_each_proxy_and_strength
+objective: weighted_mse_plus_alpha_times_coefficient_norm_squared_over_train_n_plus_lambda_w1
+solver: {method: L-BFGS-B, maxiter: 1000, ftol: 1.0e-12, gtol: 1.0e-8, maxls: 40}
+reporting: all_arms_all_folds_all_terminations_no_best_arm_selection
+prediction_lock: complete_2070_oof_predictions_before_annotation_join
+audit:
+  annotation_release: mit-interview-perceived-source-2026-09-03-v1
+  primary: 69_phase_matched_post_participants
+  sensitivity: 57_phase_matched_pre_participants
+  axes: [perceived_gender_presentation, perceived_racialised_appearance, perceived_skin_tone]
+  skin_tone_scale: ordinal_1_to_5_not_dichotomised
+  minimum_group_size: 10
+  bootstrap_replicates: 10000
+  bootstrap_seed: 2026
+  interval: pointwise_paired_participant_percentile_95_conditional_on_fits
+preserve_original_runs: true
+no_new_media_extraction: true

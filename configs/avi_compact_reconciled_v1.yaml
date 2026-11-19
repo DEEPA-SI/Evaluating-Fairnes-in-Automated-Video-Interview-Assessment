@@ -1,0 +1,28 @@
+schema_version: avi-compact-reconciled-protocol-1
+study_id: avi-compact-reconciled-v1
+status: frozen_for_execution
+interpretation: exploratory_followup_on_independent_participants_after_prior_avi_audit
+feature_manifest_sha256: b68bd59ecd1f55201c4482da179ab262030de4fc3ec05f553188bf0ddedc8e61
+outcomes_sha256: 2c0ac7bea1cab8e9898a4214fa842c8a714c6329e4789bde47854b5766c804ef
+audit_attributes_sha256: 7488ae7aac68aa9b91002024375be1002fe881b43c7182a542afe656d84257e9
+features: [video_1024, audio_1536]
+visual_policy: sampled_full_frame_dinov2_not_mit_face_crops
+audio_policy: wavlm_clip_audio_mean_max_temporal_pooling_then_six_question_mean
+target: mean_rating_hirea
+target_transform: (raw-1)/4
+official_participant_splits: {Training: 452, Validation: 64, Testing: 130}
+supervised_participant_splits: {Training: 450, Validation: 64, Testing: 130}
+ridge_alpha_grid: [0.1, 1.0, 10.0, 100.0, 1000.0]
+selection: natural_task_validation_mae_then_smaller_alpha
+validation_refit: false
+strengths: [0.002, 0.02, 0.2]
+expected_arm_fits: 15
+primary_arm: visual_natural_w1_lambda-0.02
+primary_control: natural_task
+audit_axis: self_reported_gender_code
+primary_categories: [1, 2]
+minimum_group_size: 10
+bootstrap_replicates: 10000
+bootstrap_seed: 2026
+interval: pointwise_paired_participant_percentile_95_conditional_on_fits
+solver: {method: L-BFGS-B, maxiter: 1000, ftol: 1.0e-12, gtol: 1.0e-8, maxls: 40}

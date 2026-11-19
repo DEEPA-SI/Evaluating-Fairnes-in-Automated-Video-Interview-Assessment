@@ -1,0 +1,7 @@
+{
+  "accepted_receipt_relative_to_project": "validation/1e7c9b667d25469f1de33aeaa6aca0896b76629c1f9344ac51d4766fc83dda82/attempt-1790676928906766000",
+  "output_file_sha256": {
+    "participant-outcomes.json": "2c0ac7bea1cab8e9898a4214fa842c8a714c6329e4789bde47854b5766c804ef",
+    "audit-attributes.json": "7488ae7aac68aa9b91002024375be1002fe881b43c7182a542afe656d84257e9"
+  }
+}

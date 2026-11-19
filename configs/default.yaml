@@ -1,0 +1,409 @@
+# Frozen planning contract for the MIT Interview participant-grouped study.
+# Values become run evidence only through immutable result manifests.
+
+seeds: [1, 11, 21]
+
+study:
+  corpus: mit_interview
+  construct: crowd_perceived_hireability_not_actual_hiring
+  primary_outcome:
+    source_column: RecommendHiring
+    worker_row: AGGR
+    raw_scale: [1, 7]
+    normalisation: (raw-1)/6
+    preserve_raw_value: true
+  condition: [pre, post]
+  condition_interpretation: descriptive_paired_not_causal_coaching_effect
+  independence_unit: participant
+
+cross_fitting:
+  folds: 5
+  assignment_salt: fair-avi-mit-fold-v1
+  canonical_participant_id: ascii_decimal_without_prefix_or_leading_zero
+  assignment: sort_sha256_salt_nul_participant_then_rank_mod_5
+  expected_fold_sizes: [14, 14, 14, 14, 13]
+  split_seed: none_fixed_manifest
+  role_rotation:
+    test: f
+    validation: (f+1)%5
+    train: remaining_three_folds
+  both_sessions_share_fold: true
+  model_and_sampler_seeds_only: [1, 11, 21]
+
+data:
+  raw_dir: ../../datasets/mit-interview
+  feature_dir: features/mit-interview
+  expected_participants: 69
+  expected_sessions: 138
+  session_mapping: src/data/mit_source_session_map.json
+  identity_join_audit: data/restricted/mit_identity_join_audit.json
+  transcript_source: supplied_turker_dialogue_candidate_markers_only
+  audio_source: supplied_active_interview_audio_not_candidate_voice
+  primary_pipeline_uses_supplied_legacy_features: false
+  supplied_legacy_features_inventory_only: [Facial_Features, SmileData, Prosody]
+  protected_annotations:
+    supplied_by_corpus: false
+    join_unit: participant
+    ordinary_training_access: forbidden
+    firewalled_predictions_and_proxies_lock_before_annotation_join: true
+    annotation_fields_never_select_model_or_proxy: true
+
+feature_extraction:
+  schema_version: fair-avi-mit-feature-shard-4
+  extractor_version: fair-avi-mit-extractor-4
+  seed: 2026
+  source_date_epoch_required: true
+  face_crops_manifest: face_crops.json
+  candidate_face_context:
+    subject_role: candidate
+    source_grid_hz: 1
+    maximum_samples: 128
+    selection: endpoint_rank_over_candidate_valid_indices_within_active_interval
+    spans_endpoints: true
+    missing_selected_face_policy: record_reason_and_exclude_before_valid_rank_selection
+    uncropped_frame_fallback: forbidden
+    selector:
+      name: insightface/scrfd-10gf
+      revision: 7fadd420c2351d0ffa8cac403421c1a3ed733365
+      artifact_release: v0.7
+      artifact_url: https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
+      archive_sha256: 80ffe37d8a5940d59a7384c201a2a38d4741f2f3c51eef46ebb28218a7b0ca2f
+      artifact_file: det_10g.onnx
+      artifact_sha256: 5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91
+      artifact_size_bytes: 16923827
+      input_size: [640, 640]
+      preprocessing: bgr_resize_aspect_pad_top_left_blob_mean_127.5_std_128_swap_rb
+      decoding: multi_stride_distance2bbox_then_nms
+      confidence_threshold: 0.5
+      nms_threshold: 0.4
+      principal_face_rule: per_second_unique_most_central_with_margin
+      candidate_centrality_max_ratio: 0.35
+      candidate_centrality_margin_ratio: 0.05
+      scan_fps: 1
+      first_valid_max_seconds: 30
+      minimum_active_elapsed_seconds: 60
+      terminal_invalid_run_seconds: 30
+      minimum_valid_candidate_seconds: 32
+      active_interval_rule: first_valid_then_first_terminal_invalid_run
+      retained_grid_rule: valid_active_indices_endpoint_rank
+      maximum_retained_samples: 128
+      crop_rule: square_longest_detector_side_scaled_translated_within_frame
+      crop_scale: 1.5
+      minimum_crop_side_pixels: 32
+      subject_role: candidate
+  active_interview_audio_context:
+    speaker_claim: none
+    boundary_source: candidate_face_active_interval
+    sample_rate: 16000
+    nonoverlap_window_seconds: 20
+    maximum_windows: 16
+    maximum_selected_seconds: 320
+    selection: if_n_le_cap_all_else_floor_j_times_n_minus_1_over_cap_minus_1
+    spans_first_and_last_window: true
+    partial_final_window: retain_if_nonempty
+    embedded_audio_time_base: 3/125
+    supplied_audio_time_base: 1/48000
+    end_alignment: allow_end_of_stream_shortfall_below_one_source_audio_tick
+    encode_each_window_separately: true
+    persist_full_and_active_duration_and_selected_indices: true
+    complete_active_interval_representation_claim: false
+  candidate_speech_segments_sensitivity:
+    optional: true
+    absence_blocks_core: false
+  write:
+    shard_format: deterministic_uncompressed_npz
+    sidecar_format: canonical_json
+    atomic: true
+    resume_requires_full_fingerprint_and_checksum_validation: true
+
+complete_pair_eligibility:
+  unit: participant
+  rule: both_pre_and_post_sessions_have_all_three_frozen_modality_summaries
+  required_modalities: [video, interview_audio, candidate_text]
+  determined_without: [outcome, protected_annotation]
+  imputation: forbidden
+  hash_before_training: true
+  retain_original_fold_and_random_proxy_assignments_without_reranking: true
+  report: [eligible_participants, eligible_participants_per_fold, exclusion_failures]
+  oof_session_predictions_per_configuration_seed: two_times_eligible_participants
+  participant_bootstrap_size: eligible_participants
+
+encoders:
+  video:
+    name: facebook/dinov2-large
+    architecture: dinov2_vitl14
+    revision: 47b73eefe95e8d44ec3623f8890bd894b6ea2d6c
+    weight_file: model.safetensors
+    weight_sha256: 399fba97a95f22c36834418bc69373364a99af3a1153da1c0fb31db567c92e23
+    artifact_files:
+      config.json: 12df51c069a2dc1305e34ba71ef58bc2407ea553b75f4722a1715c1bce3bbed0
+      model.safetensors: 399fba97a95f22c36834418bc69373364a99af3a1153da1c0fb31db567c92e23
+      preprocessor_config.json: 14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828
+    verified_at_utc: "2026-08-13T15:22:01Z"
+    out_dim: 1024
+    fps: 1
+    inference_batch_size: 4
+    input: preselected_principal_face_crop
+    processor: rgb_bicubic_shortest_edge_256_center_crop_224_rescale_imagenet_normalize
+    output: final_last_hidden_state_cls_index_0
+    frozen: true
+    license_id: Apache-2.0
+    license_urls:
+      - https://github.com/facebookresearch/dinov2/blob/7764ea0f912e53c92e82eb78a2a1631e92725fc8/LICENSE
+  audio:
+    name: microsoft/wavlm-base-plus
+    revision: 4c66d4806a428f2e922ccfa1a962776e232d487b
+    weight_file: pytorch_model.bin
+    weight_sha256: 3bb273a6ace99408b50cfc81afdbb7ef2de02da2eab0234e18db608ce692fe51
+    artifact_files:
+      config.json: fea6df1c2700a3954fc07e70588aecc9055eeb28db2ff57151a2db0d19180ed4
+      preprocessor_config.json: 99272fe8ccfab114b68b478681ea47ee3a1ce62bb788cb92dd6e4f69fb1f1da2
+      pytorch_model.bin: 3bb273a6ace99408b50cfc81afdbb7ef2de02da2eab0234e18db608ce692fe51
+    verified_at_utc: "2026-08-13T15:22:01Z"
+    out_dim: 768
+    sample_rate: 16000
+    waveform_normalization: false
+    conv_stride_samples: 320
+    receptive_field_samples: 400
+    pool: per_selected_active_interval_window_center_time_half_open_one_second_mean_then_max
+    output: final_last_hidden_state
+    frame_center_seconds: (j*320+199.5)/16000
+    partial_last_second: retain_if_nonempty
+    pooled_dim: 1536
+    frozen: true
+    license_id: unresolved_model-card-link_CC-BY-SA-3.0_code-repo_MIT
+    license_urls:
+      - https://github.com/microsoft/UniSpeech/blob/7cfa7e485afc15e73439b92f5b3c9fbe0ded8b90/LICENSE
+      - https://github.com/microsoft/unilm/blob/1ad6ea07df17b3e5c4c5d851f98721ecc43cf593/LICENSE
+    redistribution_review_required: true
+  text:
+    name: sentence-transformers/all-mpnet-base-v2
+    revision: e8c3b32edf5434bc2275fc9bab85f82640a19130
+    weight_file: model.safetensors
+    weight_sha256: 78c0197b6159d92658e319bc1d72e4c73a9a03dd03815e70e555c5ef05615658
+    artifact_files:
+      1_Pooling/config.json: a37f83ada23e7887be6b88f4998927dbeac0038af301553c7cd5461413bf1a56
+      config.json: d46a3e04ded82bba22528424480697d394eeda6a27484e08c5bb2bdf5906cfa0
+      model.safetensors: 78c0197b6159d92658e319bc1d72e4c73a9a03dd03815e70e555c5ef05615658
+      modules.json: 84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf
+      sentence_bert_config.json: cabfacded9272091a06ff595a46ef027a76ddf4ac9e77d0fcf11c605748f1667
+      special_tokens_map.json: 9ef40e9c160511bf3f46ceb71f1471dafa1e9473d5120bb816c36b2efa75f8ba
+      tokenizer.json: b8be2c30ba5dd723a6d5ee26d013da103d5408d92ddcb23747622f9e48f1d842
+      tokenizer_config.json: 67f2ff7e223518e729869bb3a70f0caf8368fe549383fc11cfe2dfb42fffc268
+      vocab.txt: dbd90cb94e2247bd4d4ccaecbf616d2290e66691d7d5e5bb81f063c2d0649ada
+    verified_at_utc: "2026-08-13T15:22:01Z"
+    out_dim: 768
+    source: candidate_only_supplied_transcript
+    max_sequence_tokens: 384
+    content_tokens_per_chunk: 382
+    chunks: tokenizer_ids_nonoverlapping
+    pool: artifact_attention_mask_mean_then_l2_normalize
+    frozen: true
+    license_id: Apache-2.0
+    license_urls:
+      - https://huggingface.co/sentence-transformers/all-mpnet-base-v2/blob/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md
+
+common_scorer:
+  preprocessing: train_only_standard_scaler_per_modality
+  modality_blocks:
+    video: {input_dim: 1024, linear_output_dim: 8, layer_norm: true, activation: gelu}
+    audio: {input_dim: 1536, linear_output_dim: 8, layer_norm: true, activation: gelu}
+    text: {input_dim: 768, linear_output_dim: 8, layer_norm: true, activation: gelu}
+  fusion: concatenate_24_dimensions
+  head: {linear_input_dim: 24, output_dim: 1, activation: sigmoid}
+  trainable_parameter_count: 26721
+  low_capacity_reason: 69_independent_participants
+  initialization: {linear_weight: xavier_uniform, linear_bias: zero, layer_norm_weight: one, layer_norm_bias: zero}
+
+training:
+  participant_batch_size: 16
+  session_rows_per_full_batch: 32
+  both_sessions_enter_batch_together: true
+  optimizer: adamw
+  learning_rate: 1.0e-3
+  weight_decay: 1.0e-2
+  maximum_epochs: 200
+  early_stopping_patience: 25
+  checkpoint_metric: validation_srcc
+  checkpoint_direction: maximize
+  exact_tie_break: earliest_epoch
+  gradient_norm_clip: 1.0
+
+arl:
+  method_status: transparent_project_adaptation_not_exact_reproduction
+  learner:
+    common_scorer_trainable_parameters: 26721
+    fused_representation_dimensions: 24
+  adversary:
+    input: [detached_fused_representation_24, detached_normalised_continuous_target_1]
+    architecture: linear_25_to_1_then_sigmoid
+    initialization: {linear_weight: xavier_uniform, linear_bias: zero}
+    trainable_parameters: 26
+    forbidden_inputs: [prediction, per_example_loss, proxy_group, protected_annotation]
+  weighting:
+    scope: current_session_row_minibatch
+    formula: 1_plus_sigmoid_logit_divided_by_max_batch_mean_sigmoid_logit_and_1e_minus_4
+    denominator_guard: 1.0e-4
+    learner_weight_detached: true
+    reduction: mean_weight_times_per_row_mse_not_weight_sum
+  optimization:
+    learner_only_minibatch_updates: 6
+    subsequent_order: learner_then_recompute_detached_current_state_then_adversary
+    learner_optimizer: separate_adamw_with_common_project_settings
+    adversary_optimizer: separate_adamw_with_common_project_settings
+    gradient_norm_clip_separate: {learner: 1.0, adversary: 1.0}
+    sampler: ordinary_participant_paired_with_complete_remainder
+  checkpoint:
+    metric: unweighted_validation_srcc
+    exact_tie_break: earliest_epoch
+    save: [learner, adversary, learner_optimizer, adversary_optimizer, scalers, phase, diagnostics]
+  diagnostics:
+    timing_version: arl_diagnostics_v1
+    timing: weighting_and_learner_metrics_pre_learner_step_adversary_objective_and_gradient_post_learner_step_pre_adversary_step
+    minibatch:
+      - learner_and_adversary_objectives
+      - adversary_logit_and_sigmoid_score_mean_min_max
+      - guarded_weight_denominator
+      - weight_mean_min_max
+      - weight_effective_sample_size
+      - weight_error_pearson_or_null
+      - mean_absolute_within_pair_weight_difference
+      - learner_and_adversary_preclip_gradient_norms
+      - phase_and_update_counts
+    epoch: [aggregated_minibatch_diagnostics, validation_srcc, validation_mse]
+    undefined_value: null
+    serialization: canonical_json_utf8_in_fit_artifact_and_prediction_manifest
+  protected_annotation_access: forbidden
+  proxy_access: forbidden
+
+pseudo_group:
+  join_unit: participant
+  sources:
+    face: mean_session_dinov2_summary_per_participant
+    audio_session: mean_session_wavlm_summary_per_participant
+  fit_scope: training_participants_only_per_outer_fold
+  preprocessing: train_only_standard_scaler
+  kmeans:
+    n_clusters: 2
+    init: k-means++
+    n_init: 20
+    max_iter: 300
+    tol: 1.0e-4
+    algorithm: lloyd
+    random_state: 0
+  held_out_assignment: unchanged_scaler_and_nearest_frozen_centre
+  both_sessions_share_assignment: true
+  cluster_identity_claim: forbidden
+  random_proxy:
+    salt: fair-avi-mit-random-proxy-v1
+    assignment: global_hash_rank_first_34_group_0_remaining_35_group_1
+    fold_role_or_seed_dependency: forbidden
+  balanced_sampler:
+    participant_batch_size: 16
+    participants_per_group: 8
+    session_rows_per_batch: 32
+    session_rows_per_group: 16
+    policy: deterministic_seeded_cyclic_shuffle
+    state: single_continuous_state_across_epoch_boundaries
+    no_repeat_before_group_exhaustion: true
+    duplicate_within_half_batch_only_if_group_size_below_8: true
+    require_both_groups_nonempty: true
+    optimizer_steps_per_epoch: ceil_training_participant_count_divided_by_16
+    checkpoint_resume: restore_model_optimizer_scalers_regenerate_schedule_and_advance_saved_draw_count
+    validation_sampling: complete_natural_role_distribution
+    test_sampling: complete_natural_role_distribution
+    report: [unique_participant_rate, duplication_rate]
+
+configurations:
+  firewalled:
+    - erm
+    - face_sampling_only
+    - audio_session_sampling_only
+    - random_proxy_w1
+    - face_w1
+    - audio_session_w1
+    - arl
+  conditional_supervised_oracle: protected_attribute_w1_oracle
+  oracle_minimum_reportable_training_groups: 2
+  deterministic_floors:
+    - mean
+    - phase_mean
+    - ridge_video
+    - ridge_audio
+    - ridge_text
+    - ridge_video_audio
+    - ridge_video_text
+    - ridge_audio_text
+    - ridge
+
+ridge_floor:
+  input: concatenated_session_video_1024_audio_1536_text_768
+  preprocessing: train_session_rows_standard_scaler
+  estimator: sklearn_ridge
+  alpha: 1.0
+  fit_intercept: true
+  solver: lsqr
+  tolerance: 1.0e-6
+  maximum_iterations: 10000
+  target: normalised_recommend_hiring
+  fit_scope: one_participant_safe_fit_per_rotation
+  tuning_or_refit: forbidden
+
+run_budget:
+  firewalled: {configurations: 7, folds: 5, seeds: 3, fits: 105}
+  conditional_supervised_oracle: {configurations: 1, folds: 5, seeds: 3, fits: 15}
+  learned_fit_maximum: 120
+  diagnostic_floors_outside_learned_matrix: 9
+  out_of_fold_predictions_per_configuration_seed_if_all_69_eligible: 138
+  out_of_fold_predictions_per_configuration_all_seeds_if_all_69_eligible: 414
+
+loss:
+  task: mse_on_normalised_recommend_hiring
+  lambda_w: 0.02
+  lambda_sweep: false
+  schedule: fixed_from_first_update
+  w1_groups: binary_training_proxy_only
+  sampling_only: unweighted_task_mse_without_proxy_group_objective_access
+  w1_objective: task_mse_plus_lambda_w_times_exact_balanced_empirical_w1
+  adversarial_component_for_proxy_configurations: forbidden
+
+evaluation:
+  utility: [srcc, pearson, mae_normalised, mae_raw_scale, rmse]
+  primary_utility: srcc
+  secondary_utility: [pearson, mae_normalised, mae_raw_scale, rmse]
+  primary_contrast_summary:
+    statistic: arithmetic_mean_of_three_within_seed_paired_deltas
+    show_seed_specific_deltas: true
+    recompute_inside_each_participant_bootstrap_replicate: true
+  paired_condition_diagnostic:
+    quantity: predicted_and_observed_post_minus_pre_recommend_hiring
+    interpretation: descriptive_noncausal
+  participant_cluster_bootstrap:
+    resamples: 10000
+    random_state: 2026
+    confidence_level: 0.95
+  protected_audit:
+    metric: maximum_pairwise_empirical_w1
+    minimum_independent_participants_per_reported_category: 10
+    multi_category_without_forced_binarisation: true
+    two_group_spdd_is_special_case: true
+    unknown_is_valid: true
+
+annotation:
+  join_unit: participant
+  minimum_independent_raters: 3
+  stimulus_targets: [0.2, 0.5, 0.8]
+  images_per_session: 3
+  packet_size: 6
+  packet_not_assessable_if_either_session_has_fewer_than_3_distinct_valid_crops: true
+  offset_sensitivity_seconds: 30
+  manual_fields:
+    - perceived_gender_presentation
+    - perceived_racialised_appearance
+    - perceived_skin_tone
+    - cannot_determine
+    - gender_presentation_confidence
+    - racialised_appearance_confidence
+    - skin_tone_confidence
+  separately_sourced_fields: [self_reported_gender, self_reported_ethnicity]
+  manual_inference_prohibited: [ethnicity, religion, nationality, citizenship, disability, sexual_orientation]

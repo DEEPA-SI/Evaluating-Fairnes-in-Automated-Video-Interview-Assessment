@@ -1,0 +1,63 @@
+"""Feature extraction and training-only proxy utilities."""
+
+from .closure import (
+    FEATURE_EXTRACTION_CLOSURE_FILENAME,
+    FEATURE_EXTRACTION_CLOSURE_SCHEMA_VERSION,
+    FeatureExtractionClosure,
+    FeatureRecordArtifacts,
+    load_verified_feature_extraction_closure,
+    write_feature_extraction_closure,
+)
+from .extraction import (
+    CodeProvenance,
+    ExtractionDependencies,
+    ExtractionError,
+    ExtractionSettings,
+    ExtractionSummary,
+    FaceCropBatch,
+    ManifestFaceCropProvider,
+    SuppliedTranscriptProvider,
+    chunk_token_ids,
+    code_provenance,
+    decode_audio_ffmpeg,
+    extract_dataset,
+    pool_wavlm_seconds,
+    safe_clip_stem,
+    wavlm_output_length,
+    write_canonical_json,
+)
+from .face_selector import (
+    Detection,
+    OpenCvFrameDecoder,
+    ScrfdFaceDetector,
+    crop_box_xyxy,
+)
+
+__all__ = [
+    "CodeProvenance",
+    "FEATURE_EXTRACTION_CLOSURE_FILENAME",
+    "FEATURE_EXTRACTION_CLOSURE_SCHEMA_VERSION",
+    "ExtractionDependencies",
+    "ExtractionError",
+    "ExtractionSettings",
+    "ExtractionSummary",
+    "FaceCropBatch",
+    "FeatureExtractionClosure",
+    "FeatureRecordArtifacts",
+    "Detection",
+    "ManifestFaceCropProvider",
+    "OpenCvFrameDecoder",
+    "ScrfdFaceDetector",
+    "SuppliedTranscriptProvider",
+    "chunk_token_ids",
+    "code_provenance",
+    "crop_box_xyxy",
+    "decode_audio_ffmpeg",
+    "extract_dataset",
+    "load_verified_feature_extraction_closure",
+    "pool_wavlm_seconds",
+    "safe_clip_stem",
+    "wavlm_output_length",
+    "write_canonical_json",
+    "write_feature_extraction_closure",
+]

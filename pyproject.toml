@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interview-fairness-evaluation"
+version = "0.1.0"
+description = "Controlled proxy-regularisation experiments and reproducible interview-fairness evidence"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11,<3.12"
+authors = [{name = "Deepa Singh"}]
+dependencies = [
+  "numpy==2.4.6", "scipy==1.17.1", "scikit-learn==1.9.0",
+  "pyyaml==6.0.3", "threadpoolctl==3.6.0", "matplotlib==3.11.1",
+]
+
+[project.optional-dependencies]
+neural = ["torch>=2.2"]
+extraction = [
+  "torch>=2.2", "torchvision>=0.17", "transformers>=4.40",
+  "sentence-transformers>=2.7", "huggingface-hub>=0.23",
+  "pandas>=2.2", "ffmpeg-python>=0.2", "opencv-python>=4.9",
+  "insightface==1.0.1", "onnxruntime==1.29.0", "tqdm>=4.66",
+]
+
+[project.urls]
+Repository = "https://github.com/DEEPA-SI/Evaluating-Fairnes-in-Automated-Video-Interview-Assessment"
+
+[tool.setuptools.packages.find]
+include = ["src*", "scripts*"]
+namespaces = true
+
+[tool.setuptools.package-data]
+"src.data" = ["annotation_schema.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore:An input array is constant:scipy.stats.ConstantInputWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

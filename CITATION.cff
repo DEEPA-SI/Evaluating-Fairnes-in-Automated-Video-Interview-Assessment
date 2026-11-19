@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this code or its aggregate evidence, please cite the thesis below."
+type: software
+title: "Evaluating Fairness in Automated Video Interview Assessment"
+abstract: "Research software and aggregate evidence for controlled comparisons of proxy-group Wasserstein regularisation, predictive performance and separately audited group outcomes in interview-rating models."
+authors:
+  - family-names: "Singh"
+    given-names: "Deepa"
+    affiliation: "Unitec Institute of Technology"
+repository-code: "https://github.com/DEEPA-SI/Evaluating-Fairnes-in-Automated-Video-Interview-Assessment"
+license: MIT
+keywords:
+  - algorithmic fairness
+  - video interview assessment
+  - multimodal learning
+  - Wasserstein distance
+  - regression
+  - fairness auditing
+preferred-citation:
+  type: thesis
+  title: "Evaluating Fairness in Automated Video Interview Assessment"
+  authors:
+    - family-names: "Singh"
+      given-names: "Deepa"
+      affiliation: "Unitec Institute of Technology"
+  institution:
+    name: "Unitec Institute of Technology"
+    city: "Auckland"
+    country: "NZ"
+  year: 2026
+  thesis-type: "Master of Applied Technologies thesis"

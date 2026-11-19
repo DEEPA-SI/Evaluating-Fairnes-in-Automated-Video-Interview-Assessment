@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.png binary
+*.pdf binary
+*.svg text eol=lf -whitespace
+*.json text eol=lf
+*.csv -text -whitespace
+*.py text eol=lf
+# Preserve the original aggregate bytes, including their final newline convention.
+results/*.json -text -whitespace

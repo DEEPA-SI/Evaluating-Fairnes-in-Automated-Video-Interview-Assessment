@@ -1,0 +1,16 @@
+schema_version: public-mit-compact-protocol-1
+study_id: study2-compact-2026-10-21-v1
+interpretation: post_audit_exploratory
+participants: 69
+sessions: 138
+outer_folds: 5
+features: [video_1024, audio_1536, text_768]
+target: RecommendHiring
+target_transform: (raw-1)/6
+ridge_alpha: 1.0
+strengths: [0.002, 0.02, 0.2]
+expected_arms: 15
+expected_fits: 75
+annotation_fields_used_for_fitting: []
+solver: {method: L-BFGS-B, maxiter: 1000, ftol: 1.0e-12, gtol: 1.0e-8, maxls: 40}
+protocol_origin: public_packaging_of_original_fixed_comparison_not_a_new_fit

@@ -1,0 +1,151 @@
+{
+  "schema_version": "mit-participant-audit-2",
+  "join_unit": "participant",
+  "participant_id_format": "canonical_ascii_decimal_without_P_or_PP_prefix",
+  "constructs": [
+    "perceived_gender_presentation",
+    "perceived_racialised_appearance",
+    "perceived_skin_tone"
+  ],
+  "codebook_contract": {
+    "schema_version": "mit-annotation-codebook-2",
+    "category_source": "external_versioned_json",
+    "real_rating_status": "approved_for_rating",
+    "tracked_example_version": "synthetic-v1",
+    "tracked_example_status": "synthetic_example_only"
+  },
+  "rater_table": {
+    "columns": [
+      "participant_id",
+      "rater_id",
+      "perceived_gender_presentation",
+      "perceived_racialised_appearance",
+      "perceived_skin_tone",
+      "cannot_determine",
+      "gender_presentation_confidence",
+      "racialised_appearance_confidence",
+      "skin_tone_confidence",
+      "codebook_version"
+    ],
+    "key": ["participant_id", "rater_id"],
+    "minimum_independent_raters": 3,
+    "perceived_skin_tone_values": [1, 2, 3, 4, 5],
+    "field_confidence_values": [1, 2, 3, 4, 5],
+    "field_unknown_representation": "blank",
+    "cannot_determine_rule": "1_exactly_when_all_three_perceived_fields_are_blank"
+  },
+  "rater_response_table": {
+    "visibility": "rater_facing_blinded",
+    "columns": [
+      "rater_manifest_id",
+      "packet_id",
+      "perceived_gender_presentation",
+      "perceived_racialised_appearance",
+      "perceived_skin_tone",
+      "cannot_determine",
+      "gender_presentation_confidence",
+      "racialised_appearance_confidence",
+      "skin_tone_confidence",
+      "codebook_version"
+    ],
+    "key": ["rater_manifest_id", "packet_id"],
+    "prohibited": ["participant_id", "rater_id", "session_id", "condition", "crop_reference"],
+    "linkage": "restricted_linkage_manifest_converts_packet_id_to_participant_id_after_collection"
+  },
+  "consensus_table": {
+    "columns": [
+      "participant_id",
+      "perceived_gender_presentation",
+      "perceived_racialised_appearance",
+      "perceived_skin_tone",
+      "cannot_determine",
+      "rater_count",
+      "consensus_method",
+      "codebook_version"
+    ],
+    "key": ["participant_id"],
+    "nominal_rule": "at_least_2_valid_and_strict_majority_else_unknown",
+    "skin_tone_rule": "at_least_2_valid_and_range_at_most_1_then_exact_median_else_unknown",
+    "skin_tone_consensus_values": [
+      1,
+      1.5,
+      2,
+      2.5,
+      3,
+      3.5,
+      4,
+      4.5,
+      5
+    ]
+  },
+  "self_reported_table": {
+    "columns": [
+      "participant_id",
+      "self_reported_gender",
+      "self_reported_ethnicity",
+      "source_provenance"
+    ],
+    "key": ["participant_id"],
+    "separate_from_perceived_fields": true
+  },
+  "manual_inference_prohibited": [
+    "ethnicity",
+    "religion",
+    "nationality",
+    "citizenship",
+    "disability",
+    "sexual_orientation"
+  ],
+  "firewall_prohibited_columns": [
+    "session_id",
+    "condition",
+    "phase",
+    "pre_post",
+    "transcript",
+    "outcome",
+    "RecommendHiring",
+    "Overall",
+    "prediction",
+    "proxy",
+    "cluster"
+  ],
+  "stimulus_contract": {
+    "face_manifest_schema_version": "mit-candidate-face-crops-2",
+    "source_binding": "source_video_sha256_and_ffprobe_duration_with_0.001_second_tolerance",
+    "targets": [0.2, 0.5, 0.8],
+    "target_time_basis": "candidate_face_active_interval_half_open",
+    "target_selection": "nearest_distinct_candidate_valid_timestamp_to_each_target",
+    "crops_per_session": 3,
+    "sessions_per_participant": 2,
+    "crop_subject_role": "candidate",
+    "distinctness_unit": "timestamp_and_grid_index",
+    "not_assessable_rule": "either_session_has_no_valid_active_interval_or_fewer_than_3_distinct_valid_crops",
+    "rater_asset_rule": "checksum_verified_crops_exported_under_HMAC_opaque_basenames"
+  },
+  "audit_report": {
+    "schema_version": "mit-annotation-audit-report-2",
+    "scope": "aggregate_only_without_participant_rater_session_crop_or_row_values",
+    "input_bindings": [
+      "approved_codebook_payload_and_file_sha256",
+      "raw_rater_file_sha256",
+      "master_stimulus_payload_and_file_sha256"
+    ],
+    "coverage": "every_assessable_participant_and_no_not_assessable_participant",
+    "minimum_independent_raters": 3,
+    "nominal_agreement": "krippendorff_alpha_coincidence_matrix_nominal_distance",
+    "ordinal_agreement": "krippendorff_alpha_marginal_frequency_cumulative_distance",
+    "missingness": "excluded_pairwise_and_reported_without_imputation",
+    "degenerate_alpha": "json_null_with_explicit_status",
+    "also_reports": [
+      "valid_and_missing_counts",
+      "exact_pairwise_agreement",
+      "ordered_category_counts",
+      "symmetric_unordered_disagreement_counts",
+      "fixed_consensus_known_and_unknown_counts",
+      "stimulus_failure_reason_counts",
+      "crop_offset_distribution",
+      "all_six_offsets_at_most_30_seconds_count"
+    ],
+    "storage": "canonical_checksum_bound_JSON_beneath_ignored_data_restricted"
+  }
+}

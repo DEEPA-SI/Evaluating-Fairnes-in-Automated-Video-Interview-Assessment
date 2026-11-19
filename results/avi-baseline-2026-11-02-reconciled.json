@@ -1,0 +1,71 @@
+{
+  "schema_version": "avi-baseline-reconciled-aggregate-1",
+  "status": "descriptive_imported_execution_receipt",
+  "source": {
+    "commit": "a286b3a",
+    "record": "coordination/research/T-481-rq4-protocol-2026-11-02.md",
+    "record_sha256": "9d46658ba8ea61757ea9cfaf6bf9dbb26f0d96303da483c947e36bd86fc13202",
+    "prediction_lock_file_sha256": "b8d81ce730da664b4924339c4dc46e4382b89c8877a835bce94c8a8bae1c8129",
+    "aggregate_audit_file_sha256": "2de6db122139015e87184c301fa32a16df8343cfc8dd27e90ab5fb0114fff089",
+    "participant_artifacts_reopened_here": false
+  },
+  "dataset": {
+    "feature_participants": 646,
+    "clips": 3876,
+    "eligible_training": 450,
+    "validation": 64,
+    "test": 130,
+    "target": "mean_rating_hirea",
+    "target_scale": [
+      1,
+      5
+    ],
+    "modalities": [
+      "full_frame_video",
+      "audio"
+    ],
+    "six_clip_pooling": "equal_weight_participant_mean"
+  },
+  "method": {
+    "scorer": "concatenated_featurewise_standardized_ridge",
+    "selected_alpha": 1000,
+    "selection": "validation_MAE",
+    "prediction_clip": [
+      1,
+      5
+    ],
+    "note": "The source calls the scorer modality-balanced; its block scaling precedes featurewise standardization and therefore cancels. No W1 intervention/control comparison was executed in this baseline."
+  },
+  "utility": {
+    "validation_mae": 0.41519476765729346,
+    "test_mae": 0.418627360829278,
+    "training_mean_baseline_test_mae": 0.4788717948717949,
+    "relative_mae_reduction": 0.1258049329437866
+  },
+  "audit": {
+    "axis": "self_reported_gender_code",
+    "groups": [
+      {
+        "source_code": 1,
+        "count": 67,
+        "mae": 0.4517895967680897
+      },
+      {
+        "source_code": 2,
+        "count": 62,
+        "mae": 0.3845661851111941
+      },
+      {
+        "source_code": 4,
+        "count": 1,
+        "mae": null
+      }
+    ],
+    "signed_mae_gap_code_1_minus_2": 0.0672234116568956,
+    "absolute_mae_gap": 0.0672234116568956,
+    "signed_gap_interval_95": null,
+    "uncertainty_note": "The original percentile interval bootstrapped an absolute gap. Its positive lower endpoint does not establish a nonzero signed population difference; that interval is not accepted for a significance claim."
+  },
+  "accepted_scope": "Descriptive predictive baseline and observed group-error difference only; not independent confirmation of W1 mitigation.",
+  "independent_mit_comparison": "Outcomes, score scales and visual input policies differ; do not pool raw outcomes or infer exact representation replication."
+}

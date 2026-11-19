@@ -1,0 +1,279 @@
+{
+  "group_response": [
+    {
+      "axis": "perceived_gender_presentation",
+      "category": "feminine_presentation",
+      "control_bias_rating": -0.008224810100882766,
+      "control_mae_rating": 0.5814335616785444,
+      "control_prediction_rating": 5.165100809631675,
+      "delta_bias_rating": -0.04355252125441263,
+      "delta_mae_rating": -0.004103127130720585,
+      "method_bias_rating": -0.051777331355295386,
+      "method_mae_rating": 0.5773304345478238,
+      "method_prediction_rating": 5.121548288377262,
+      "n": 43,
+      "target_mean_rating": 5.173325619732558
+    },
+    {
+      "axis": "perceived_gender_presentation",
+      "category": "masculine_presentation",
+      "control_bias_rating": 0.030668269212356047,
+      "control_mae_rating": 0.5512215395397662,
+      "control_prediction_rating": 4.929420564963125,
+      "delta_bias_rating": 0.09337325768607405,
+      "delta_mae_rating": 0.024605817392749807,
+      "method_bias_rating": 0.1240415268984301,
+      "method_mae_rating": 0.5758273569325161,
+      "method_prediction_rating": 5.0227938226491995,
+      "n": 26,
+      "target_mean_rating": 4.898752295750769
+    },
+    {
+      "axis": "perceived_racialised_appearance",
+      "category": "east_asian_appearance_source_category",
+      "control_bias_rating": 0.11793613702562797,
+      "control_mae_rating": 0.4634056024629756,
+      "control_prediction_rating": 5.067726938157503,
+      "delta_bias_rating": -0.0030725753420183105,
+      "delta_mae_rating": -0.005671495991889791,
+      "method_bias_rating": 0.11486356168360966,
+      "method_mae_rating": 0.45773410647108576,
+      "method_prediction_rating": 5.064654362815484,
+      "n": 16,
+      "target_mean_rating": 4.949790801131875
+    },
+    {
+      "axis": "perceived_racialised_appearance",
+      "category": "middle_eastern_or_north_african_appearance_source_category",
+      "control_bias_rating": 0.27374831852704945,
+      "control_mae_rating": 0.5109704621504525,
+      "control_prediction_rating": 5.204074248204322,
+      "delta_bias_rating": 0.052417824152012404,
+      "delta_mae_rating": 0.04057955920102857,
+      "method_bias_rating": 0.32616614267906185,
+      "method_mae_rating": 0.5515500213514811,
+      "method_prediction_rating": 5.256492072356334,
+      "n": 11,
+      "target_mean_rating": 4.930325929677273
+    },
+    {
+      "axis": "perceived_racialised_appearance",
+      "category": "white_appearance_source_category",
+      "control_bias_rating": -0.10274079496652934,
+      "control_mae_rating": 0.6067480184133387,
+      "control_prediction_rating": 5.042228740120137,
+      "delta_bias_rating": -0.01407294352940499,
+      "delta_mae_rating": 0.003114745289994919,
+      "method_bias_rating": -0.11681373849593432,
+      "method_mae_rating": 0.6098627637033336,
+      "method_prediction_rating": 5.028155796590732,
+      "n": 24,
+      "target_mean_rating": 5.144969535086666
+    },
+    {
+      "axis": "perceived_skin_tone",
+      "category": "1",
+      "control_bias_rating": -0.1554639249790764,
+      "control_mae_rating": 0.5971758477694353,
+      "control_prediction_rating": 5.136430224605425,
+      "delta_bias_rating": -0.012069162967818736,
+      "delta_mae_rating": 0.00672387016310122,
+      "method_bias_rating": -0.16753308794689514,
+      "method_mae_rating": 0.6038997179325365,
+      "method_prediction_rating": 5.124361061637605,
+      "n": 20,
+      "target_mean_rating": 5.2918941495845
+    },
+    {
+      "axis": "perceived_skin_tone",
+      "category": "2",
+      "control_bias_rating": 0.018603601980080414,
+      "control_mae_rating": 0.5077846569971701,
+      "control_prediction_rating": 4.895506344140451,
+      "delta_bias_rating": 0.012516040262141778,
+      "delta_mae_rating": -0.012482987379775545,
+      "method_bias_rating": 0.03111964224222219,
+      "method_mae_rating": 0.4953016696173946,
+      "method_prediction_rating": 4.908022384402593,
+      "n": 27,
+      "target_mean_rating": 4.87690274216037
+    },
+    {
+      "axis": "perceived_skin_tone",
+      "category": "3",
+      "control_bias_rating": 0.16527081488795847,
+      "control_mae_rating": 0.5470707185133717,
+      "control_prediction_rating": 5.289577870228625,
+      "delta_bias_rating": 0.009514557549441173,
+      "delta_mae_rating": 0.03328884084707179,
+      "method_bias_rating": 0.17478537243739964,
+      "method_mae_rating": 0.5803595593604435,
+      "method_prediction_rating": 5.299092427778067,
+      "n": 15,
+      "target_mean_rating": 5.124307055340666
+    }
+  ],
+  "linked_source_sha256": {
+    "results/avi-baseline-2026-11-02-reconciled.json": "101ba0adec7771588fa480c7c9f0cab7f7f8f222ceaecfed5ae6fc0acdab82d3",
+    "results/avi-compact-reconciled-v1.json": "f00abf5ceade84fd95a7ce3180d4a88afb74c170689a2619a927faa2eb7444db",
+    "results/study2-compact-2026-10-21-aggregate.json": "c0560b284a30b3e10785027cd4ee28e09694218229abc6d44c13653e19bd13cd",
+    "runs/stage-c/aggregate.json": "8cc21d8078e27bb1eff3fb56d113157c34d4191023f642e134fc6a0ea2752bd8"
+  },
+  "new_intervals": false,
+  "no_fitting": true,
+  "predictive_effects": [
+    {
+      "contrast_id": "visual_w1_incremental",
+      "intervention": "face_w1",
+      "mae_change_percentile_95_rating_points": [
+        0.0037985655715785265,
+        0.07978878893031256
+      ],
+      "mae_change_rating_points": 0.0404520881360963,
+      "proxy": "visual",
+      "reference": "face_sampling_only",
+      "seed_count": 3,
+      "srcc_change": -0.03798734211906119,
+      "srcc_percentile_95": [
+        -0.0720634611437089,
+        -0.004970523079610034
+      ]
+    },
+    {
+      "contrast_id": "audio_session_w1_incremental",
+      "intervention": "audio_session_w1",
+      "mae_change_percentile_95_rating_points": [
+        0.00012562049963487837,
+        0.0593341169249125
+      ],
+      "mae_change_rating_points": 0.02894945665005097,
+      "proxy": "audio",
+      "reference": "audio_session_sampling_only",
+      "seed_count": 3,
+      "srcc_change": -0.046590317543067826,
+      "srcc_percentile_95": [
+        -0.09148400070159231,
+        -0.00197673446180858
+      ]
+    }
+  ],
+  "schema_version": "thesis-explanatory-figure-data-1",
+  "semantics": {
+    "group_response": "MIT post-session descriptive points; 69 participants; natural visual W1 at 0.02 versus natural task-only; perceived source categories",
+    "mae_direction": "Lower change favours W1; original 1-7 rating points",
+    "predictive_contrast": "Original neural W1 minus its matched sampling-only control",
+    "predictive_intervals": "Existing pointwise 95% participant-cluster percentile intervals of the three-fixed-seed arithmetic mean; both sessions travel with each participant",
+    "spread_alignment": "Each corpus/quantity divided by its own natural task-only value, times 100; MIT: 69 post scores and audit rows; AVI: 130 test scores and 129 gender audit rows",
+    "srcc_direction": "Higher change favours W1"
+  },
+  "source_sha256": {
+    "results/stage_a_secondary_utility.json": "78977b61d5454e3e8632184ea7e9543597b29d53169e1e9b52d31ceca32b64ed",
+    "results/thesis-expanded-analysis-2026-11-17.json": "5924caee26289978527b4ef36b3500874527f87e7142d6ed58e61b7a1b3f6e78"
+  },
+  "spread_alignment": [
+    {
+      "arm_id": "natural_task",
+      "audit_n": 69,
+      "corpus": "mit",
+      "prediction_sd": 0.09017401412092314,
+      "score_n": 69,
+      "score_w1": 0.04870718422489829,
+      "sd_retained_percent": 100.0,
+      "srcc": 0.2758154532034424,
+      "target_sd": 0.11478590560018496,
+      "w1_per_score_sd": 0.5401465677194105,
+      "w1_retained_percent": 100.0
+    },
+    {
+      "arm_id": "visual_natural_w1_lambda-0.02",
+      "audit_n": 69,
+      "corpus": "mit",
+      "prediction_sd": 0.08645044875066478,
+      "score_n": 69,
+      "score_w1": 0.028574480894211343,
+      "sd_retained_percent": 95.87068912639836,
+      "srcc": 0.2560856420059515,
+      "target_sd": 0.11478590560018496,
+      "w1_per_score_sd": 0.33053016273662333,
+      "w1_retained_percent": 58.66584436963726
+    },
+    {
+      "arm_id": "audio_natural_w1_lambda-0.02",
+      "audit_n": 69,
+      "corpus": "mit",
+      "prediction_sd": 0.08144783263789486,
+      "score_n": 69,
+      "score_w1": 0.04463049922579944,
+      "sd_retained_percent": 90.32295327196314,
+      "srcc": 0.21213200706043006,
+      "target_sd": 0.11478590560018496,
+      "w1_per_score_sd": 0.547964234041931,
+      "w1_retained_percent": 91.63021828509865
+    },
+    {
+      "arm_id": "audio_natural_w1_lambda-0.2",
+      "audit_n": 69,
+      "corpus": "mit",
+      "prediction_sd": 0.0680351024890869,
+      "score_n": 69,
+      "score_w1": 0.037535370735075756,
+      "sd_retained_percent": 75.4486790372357,
+      "srcc": 0.037431836244128595,
+      "target_sd": 0.11478590560018496,
+      "w1_per_score_sd": 0.5517059482801041,
+      "w1_retained_percent": 77.06331485261329
+    },
+    {
+      "arm_id": "natural_task",
+      "audit_n": 129,
+      "corpus": "avi",
+      "prediction_sd": 0.08146395184917564,
+      "score_n": 130,
+      "score_w1": 0.061890015876864865,
+      "sd_retained_percent": 100.0,
+      "srcc": 0.47313121711624295,
+      "target_sd": 0.14901749232137643,
+      "w1_per_score_sd": 0.759722729771931,
+      "w1_retained_percent": 100.0
+    },
+    {
+      "arm_id": "visual_natural_w1_lambda-0.02",
+      "audit_n": 129,
+      "corpus": "avi",
+      "prediction_sd": 0.08024329595746181,
+      "score_n": 130,
+      "score_w1": 0.06107522943038256,
+      "sd_retained_percent": 98.50159995432854,
+      "srcc": 0.4550206825532833,
+      "target_sd": 0.14901749232137643,
+      "w1_per_score_sd": 0.7611256330093852,
+      "w1_retained_percent": 98.68349291087048
+    },
+    {
+      "arm_id": "audio_natural_w1_lambda-0.02",
+      "audit_n": 129,
+      "corpus": "avi",
+      "prediction_sd": 0.07420907077470233,
+      "score_n": 130,
+      "score_w1": 0.05658027666940195,
+      "sd_retained_percent": 91.094366391769,
+      "srcc": 0.4421115569953375,
+      "target_sd": 0.14901749232137643,
+      "w1_per_score_sd": 0.7624442144165752,
+      "w1_retained_percent": 91.42068533634396
+    },
+    {
+      "arm_id": "audio_natural_w1_lambda-0.2",
+      "audit_n": 129,
+      "corpus": "avi",
+      "prediction_sd": 0.06675809310239891,
+      "score_n": 130,
+      "score_w1": 0.049556848089557126,
+      "sd_retained_percent": 81.94801699038182,
+      "srcc": 0.29502194874098153,
+      "target_sd": 0.14901749232137643,
+      "w1_per_score_sd": 0.7423346861262627,
+      "w1_retained_percent": 80.07244365255042
+    }
+  ]
+}
