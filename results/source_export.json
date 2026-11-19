@@ -191,15 +191,15 @@
     },
     {
       "public_path": "src/features/avi_participant_aggregation.py",
-      "public_sha256": "8b15ace59088f2721bb1605d22c5d7db4f557aec545149cb0090223f51b9d98a",
-      "relationship": "unchanged",
+      "public_sha256": "aec8d92bd0a1233d85f82f600809651f2660711257cf9af82de08d9ccf224819",
+      "relationship": "portability_or_documentation_adaptation",
       "source_path": "src/features/avi_participant_aggregation.py",
       "source_sha256": "8b15ace59088f2721bb1605d22c5d7db4f557aec545149cb0090223f51b9d98a"
     },
     {
       "public_path": "src/features/avi_preprocessing.py",
-      "public_sha256": "de6059fd01a443ec3befa153d231f51a46c62350c12bcb4b5330d7027b30992d",
-      "relationship": "unchanged",
+      "public_sha256": "ccc7f198332c76400abb66a524c05ce9954d5e696bfa113174db13e6f031a188",
+      "relationship": "portability_or_documentation_adaptation",
       "source_path": "src/features/avi_preprocessing.py",
       "source_sha256": "de6059fd01a443ec3befa153d231f51a46c62350c12bcb4b5330d7027b30992d"
     },

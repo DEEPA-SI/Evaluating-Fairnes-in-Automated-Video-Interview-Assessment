@@ -19,8 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-NOTE: This licence covers the source code only. It does not cover the MIT
-Interview dataset or any derived participant-level artefacts. The corpus is
-restricted to research use; its terms prohibit redistribution and public
-posting. See data/README.md for the data boundary.

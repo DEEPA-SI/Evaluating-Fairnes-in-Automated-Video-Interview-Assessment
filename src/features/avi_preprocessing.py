@@ -10,7 +10,6 @@ from collections.abc import Mapping, Sequence
 
 import numpy as np
 
-
 EXPECTED_CLIPS = 6
 
 
@@ -120,13 +119,13 @@ def decode_avi_frames(
 ) -> tuple[np.ndarray, ...]:
     """Decode deterministic one-second video frames for a verified CFR AVI clip."""
     from pathlib import Path
+
     import cv2
 
     requested = tuple(frame_seconds)
 
     if not requested or any(
-        isinstance(t, bool) or not isinstance(t, int) or t < 0
-        for t in requested
+        isinstance(t, bool) or not isinstance(t, int) or t < 0 for t in requested
     ):
         raise ValueError("Frame seconds must be nonempty nonnegative integers")
 
@@ -193,14 +192,8 @@ def pool_avi_video_embeddings(embeddings: np.ndarray) -> np.ndarray:
     """Mean-pool DINOv2 CLS embeddings over selected AVI video frames."""
     values = np.asarray(embeddings, dtype=np.float32)
 
-    if (
-        values.ndim != 2
-        or values.shape[0] == 0
-        or values.shape[1] != AVI_VIDEO_EMBEDDING_DIM
-    ):
-        raise ValueError(
-            "Expected nonempty N x 1024 DINOv2 frame embeddings"
-        )
+    if values.ndim != 2 or values.shape[0] == 0 or values.shape[1] != AVI_VIDEO_EMBEDDING_DIM:
+        raise ValueError("Expected nonempty N x 1024 DINOv2 frame embeddings")
 
     if not np.isfinite(values).all():
         raise ValueError("AVI video embeddings contain non-finite values")
@@ -228,9 +221,14 @@ def extract_avi_video_embedding(
 
     result = subprocess.run(
         [
-            "ffprobe", "-v", "error",
-            "-show_entries", "format=duration",
-            "-of", "json", str(video_path),
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "json",
+            str(video_path),
         ],
         check=True,
         capture_output=True,
@@ -248,7 +246,7 @@ def extract_avi_video_embedding(
     batch_size = 4
 
     for start in range(0, len(timestamps), batch_size):
-        batch_timestamps = timestamps[start:start + batch_size]
+        batch_timestamps = timestamps[start : start + batch_size]
         images = []
 
         frames = decode_avi_frames(video_path, batch_timestamps)
@@ -281,9 +279,7 @@ def extract_avi_video_embedding(
 
         embeddings.append(batch_embeddings)
 
-    return pool_avi_video_embeddings(
-        np.concatenate(embeddings, axis=0)
-    )
+    return pool_avi_video_embeddings(np.concatenate(embeddings, axis=0))
 
 
 AVI_AUDIO_EMBEDDING_DIM = 1536
@@ -301,7 +297,7 @@ def extract_avi_audio_embedding(
     pooled_parts = []
 
     for start in range(0, waveform.size, window_samples):
-        segment = waveform[start:start + window_samples]
+        segment = waveform[start : start + window_samples]
 
         # WavLM's convolutional feature extractor requires at least
         # 400 samples at 16 kHz. Ignore shorter residual fragments.
@@ -339,14 +335,9 @@ def extract_avi_audio_embedding(
     if not pooled_parts:
         raise ValueError("No valid audio intervals")
 
-    embedding = np.concatenate(pooled_parts, axis=0).mean(
-        axis=0, dtype=np.float32
-    )
+    embedding = np.concatenate(pooled_parts, axis=0).mean(axis=0, dtype=np.float32)
 
-    if (
-        embedding.shape != (AVI_AUDIO_EMBEDDING_DIM,)
-        or not np.isfinite(embedding).all()
-    ):
+    if embedding.shape != (AVI_AUDIO_EMBEDDING_DIM,) or not np.isfinite(embedding).all():
         raise ValueError("Invalid AVI audio embedding")
 
     return embedding
@@ -390,9 +381,7 @@ def extract_avi_participant_multimodal(
         media_path = Path(media_path)
 
         if not media_path.is_file():
-            raise FileNotFoundError(
-                f"Media unavailable for question {question}"
-            )
+            raise FileNotFoundError(f"Media unavailable for question {question}")
 
         video_features[question] = extract_avi_video_embedding(
             media_path,

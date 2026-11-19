@@ -18,4 +18,4 @@ test:
 	$(PYTHON) -m pytest
 
 lint:
-	$(PYTHON) -m ruff check src scripts tests
+	$(PYTHON) -m ruff check --no-respect-gitignore src scripts tests

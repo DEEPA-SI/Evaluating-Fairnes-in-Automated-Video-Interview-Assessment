@@ -26,7 +26,6 @@ from src.features.avi_preprocessing import (
     pool_participant_clips,
 )
 
-
 PARTICIPANT_AGGREGATION_SCHEMA_VERSION = "avi-participant-video-audio-aggregation-1"
 QUESTION_ORDER = ("q1", "q2", "q3", "q4", "q5", "q6")
 OFFICIAL_SPLITS = {"Training": 452, "Validation": 64, "Testing": 130}
@@ -34,7 +33,9 @@ _PARTICIPANT_ID = re.compile(r"^[0-9a-f]{24}$", re.ASCII)
 
 
 def canonical_json(value: object) -> bytes:
-    return (json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n").encode()
+    return (
+        json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n"
+    ).encode()
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -82,26 +83,46 @@ def group_manifest_clips(clips: Iterable[Any]) -> dict[str, tuple[Any, ...]]:
         questions = tuple(row.question_id for row in rows)
         if len(rows) != 6 or set(questions) != set(QUESTION_ORDER):
             raise ValueError("AVI participant does not have exactly q1--q6")
-        result[participant_id] = tuple(sorted(rows, key=lambda row: QUESTION_ORDER.index(row.question_id)))
+        result[participant_id] = tuple(
+            sorted(rows, key=lambda row: QUESTION_ORDER.index(row.question_id))
+        )
     return result
 
 
-def aggregate_participant(clips: tuple[Any, ...], *, video_root: Path, audio_root: Path) -> dict[str, np.ndarray]:
+def aggregate_participant(
+    clips: tuple[Any, ...], *, video_root: Path, audio_root: Path
+) -> dict[str, np.ndarray]:
     """Pool one participant's cache vectors in the fixed question order."""
     if len(clips) != 6:
         raise ValueError("AVI aggregation needs exactly six clips")
-    video = {row.question_id: _valid_vector(video_root / f"{row.clip_id}.npy", AVI_VIDEO_EMBEDDING_DIM) for row in clips}
-    audio = {row.question_id: _valid_vector(audio_root / f"{row.clip_id}.npy", AVI_AUDIO_EMBEDDING_DIM) for row in clips}
+    video = {
+        row.question_id: _valid_vector(video_root / f"{row.clip_id}.npy", AVI_VIDEO_EMBEDDING_DIM)
+        for row in clips
+    }
+    audio = {
+        row.question_id: _valid_vector(audio_root / f"{row.clip_id}.npy", AVI_AUDIO_EMBEDDING_DIM)
+        for row in clips
+    }
     video_embedding, video_mask = pool_participant_clips(video, QUESTION_ORDER)
     audio_embedding, audio_mask = pool_participant_clips(audio, QUESTION_ORDER)
-    if not np.array_equal(video_mask, np.ones(6, dtype=np.bool_)) or not np.array_equal(audio_mask, video_mask):
+    if not np.array_equal(video_mask, np.ones(6, dtype=np.bool_)) or not np.array_equal(
+        audio_mask, video_mask
+    ):
         raise ValueError("AVI validated cache aggregation unexpectedly has a missing clip")
-    return {"video": video_embedding.astype(np.float32, copy=False), "audio": audio_embedding.astype(np.float32, copy=False), "video_mask": video_mask.astype(np.bool_, copy=False), "audio_mask": audio_mask.astype(np.bool_, copy=False), "text_available": np.asarray(False, dtype=np.bool_)}
+    return {
+        "video": video_embedding.astype(np.float32, copy=False),
+        "audio": audio_embedding.astype(np.float32, copy=False),
+        "video_mask": video_mask.astype(np.bool_, copy=False),
+        "audio_mask": audio_mask.astype(np.bool_, copy=False),
+        "text_available": np.asarray(False, dtype=np.bool_),
+    }
 
 
 def _save_npz_no_clobber(path: Path, arrays: dict[str, np.ndarray]) -> str:
     path.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-    descriptor, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".tmp", dir=path.parent
+    )
     temporary = Path(temporary_name)
     try:
         with os.fdopen(descriptor, "wb") as stream:
@@ -124,7 +145,10 @@ def _save_npz_no_clobber(path: Path, arrays: dict[str, np.ndarray]) -> str:
                 pass
             else:
                 try:
-                    with temporary.open("rb") as source, os.fdopen(destination_fd, "wb") as destination:
+                    with (
+                        temporary.open("rb") as source,
+                        os.fdopen(destination_fd, "wb") as destination,
+                    ):
                         shutil.copyfileobj(source, destination, length=1024 * 1024)
                         destination.flush()
                         os.fsync(destination.fileno())
@@ -143,19 +167,36 @@ def validate_participant_shard(path: Path) -> None:
         raise ValueError("participant shard is missing or unsafe")
     try:
         with np.load(path, allow_pickle=False) as archive:
-            if set(archive.files) != {"video", "audio", "video_mask", "audio_mask", "text_available"}:
+            if set(archive.files) != {
+                "video",
+                "audio",
+                "video_mask",
+                "audio_mask",
+                "text_available",
+            }:
                 raise ValueError("participant shard schema drifted")
             video, audio = archive["video"], archive["audio"]
-            video_mask, audio_mask, text_available = archive["video_mask"], archive["audio_mask"], archive["text_available"]
+            video_mask, audio_mask, text_available = (
+                archive["video_mask"],
+                archive["audio_mask"],
+                archive["text_available"],
+            )
     except (OSError, ValueError) as error:
         raise ValueError("participant shard is unreadable") from error
     if video.shape != (AVI_VIDEO_EMBEDDING_DIM,) or video.dtype != np.dtype(np.float32):
         raise ValueError("participant video feature contract drifted")
     if audio.shape != (AVI_AUDIO_EMBEDDING_DIM,) or audio.dtype != np.dtype(np.float32):
         raise ValueError("participant audio feature contract drifted")
-    if video_mask.shape != (6,) or audio_mask.shape != (6,) or video_mask.dtype != np.bool_ or audio_mask.dtype != np.bool_:
+    if (
+        video_mask.shape != (6,)
+        or audio_mask.shape != (6,)
+        or video_mask.dtype != np.bool_
+        or audio_mask.dtype != np.bool_
+    ):
         raise ValueError("participant modality mask contract drifted")
-    if not np.array_equal(video_mask, np.ones(6, dtype=np.bool_)) or not np.array_equal(audio_mask, video_mask):
+    if not np.array_equal(video_mask, np.ones(6, dtype=np.bool_)) or not np.array_equal(
+        audio_mask, video_mask
+    ):
         raise ValueError("participant aggregation must contain six valid video/audio clips")
     if text_available.shape != () or text_available.dtype != np.bool_ or bool(text_available):
         raise ValueError("AVI text must remain explicitly unavailable")
@@ -172,12 +213,21 @@ def _shard_matches_arrays(path: Path, arrays: dict[str, np.ndarray]) -> bool:
         return False
 
 
-def aggregate_release(clips: Iterable[Any], *, video_root: Path, audio_root: Path, output_root: Path, manifest_sha256: str) -> dict[str, Any]:
+def aggregate_release(
+    clips: Iterable[Any],
+    *,
+    video_root: Path,
+    audio_root: Path,
+    output_root: Path,
+    manifest_sha256: str,
+) -> dict[str, Any]:
     """Build or verify a no-clobber aggregate release outside the repository."""
     if output_root.exists() and not output_root.is_dir():
         raise ValueError("AVI aggregation output root is not a directory")
     grouped = group_manifest_clips(clips)
-    if dict(Counter(rows[0].split for rows in grouped.values())) != OFFICIAL_SPLITS or len(grouped) != sum(OFFICIAL_SPLITS.values()):
+    if dict(Counter(rows[0].split for rows in grouped.values())) != OFFICIAL_SPLITS or len(
+        grouped
+    ) != sum(OFFICIAL_SPLITS.values()):
         raise ValueError("AVI participant split counts drifted")
     output_root.mkdir(mode=0o700, parents=True, exist_ok=True)
     shards: list[dict[str, str]] = []
@@ -198,7 +248,28 @@ def aggregate_release(clips: Iterable[Any], *, video_root: Path, audio_root: Pat
     split_counts = dict(Counter(row["split"] for row in shards))
     if split_counts != OFFICIAL_SPLITS:
         raise RuntimeError("AVI release split count changed during aggregation")
-    payload = {"schema_version": PARTICIPANT_AGGREGATION_SCHEMA_VERSION, "status": "complete_video_audio_only", "source_manifest_sha256": manifest_sha256, "participant_count": len(shards), "split_counts": split_counts, "clips_per_participant": 6, "video": {"dimension": AVI_VIDEO_EMBEDDING_DIM, "dtype": "float32", "pooling": "mean_over_q1_to_q6"}, "audio": {"dimension": AVI_AUDIO_EMBEDDING_DIM, "dtype": "float32", "pooling": "mean_over_q1_to_q6"}, "text": {"available": False, "reason": "no_authorised_transcript_or_ASR_feature_release"}, "participant_shard_ledger_sha256": sha256_bytes(canonical_json(shards)), "participant_shards": shards, "outcome_or_audit_fields_accessed": []}
+    payload = {
+        "schema_version": PARTICIPANT_AGGREGATION_SCHEMA_VERSION,
+        "status": "complete_video_audio_only",
+        "source_manifest_sha256": manifest_sha256,
+        "participant_count": len(shards),
+        "split_counts": split_counts,
+        "clips_per_participant": 6,
+        "video": {
+            "dimension": AVI_VIDEO_EMBEDDING_DIM,
+            "dtype": "float32",
+            "pooling": "mean_over_q1_to_q6",
+        },
+        "audio": {
+            "dimension": AVI_AUDIO_EMBEDDING_DIM,
+            "dtype": "float32",
+            "pooling": "mean_over_q1_to_q6",
+        },
+        "text": {"available": False, "reason": "no_authorised_transcript_or_ASR_feature_release"},
+        "participant_shard_ledger_sha256": sha256_bytes(canonical_json(shards)),
+        "participant_shards": shards,
+        "outcome_or_audit_fields_accessed": [],
+    }
     manifest = output_root / "participant_feature_manifest.json"
     encoded = canonical_json(payload)
     if manifest.exists():
@@ -206,5 +277,7 @@ def aggregate_release(clips: Iterable[Any], *, video_root: Path, audio_root: Pat
             raise ValueError("refusing to replace non-identical AVI participant manifest")
     else:
         with manifest.open("xb") as stream:
-            stream.write(encoded); stream.flush(); os.fsync(stream.fileno())
+            stream.write(encoded)
+            stream.flush()
+            os.fsync(stream.fileno())
     return payload
